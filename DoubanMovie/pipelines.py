@@ -1,20 +1,25 @@
-# Define your item pipelines here
-#
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
-# See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-
-
-# useful for handling different item types with a single interface
 import pymysql
-from itemadapter import ItemAdapter
+import pymysql.cursors
 
 
-#class DoubanmoviePipeline:
-#   def process_item(self, item, spider):
-#        return item
-class DoubanmoviePipline(object):
+class Dou(object):
+
     def __init__(self):
-        self.connect=pymysql.connect(host='localhost',user='root',password='123456',db='Movie',port=3306)
-        self.cursor=self.connect.cursor()
-    def process_item(self,item,spider):
-        self.cursor.execute('insert into movieTable(raking,movie_name,)')
+        # 连接MySQL数据库
+        self.connect = pymysql.connect(host='localhost', user='zds', password='zds', db='zds', port=3306)
+        self.cursor = self.connect.cursor()
+        print("______________数据库连接已建立")
+
+    def process_item(self, item, Spider):
+        # 往数据库里面写入数据
+        print("--------------正在插入数据")
+        self.cursor.execute(
+            'insert into movieTable(ranking,movie_name,score,score_num)VALUES ("{}","{}","{}","{}")'.format(item['ranking'], item['movie_name'], item['score'], item['score_num']))
+        self.connect.commit()
+        return item
+
+    # 关闭数据库
+    def close_spider(self, Spider):
+        print("============正在关闭数据库连接")
+        self.cursor.close()
+        self.connect.close()
