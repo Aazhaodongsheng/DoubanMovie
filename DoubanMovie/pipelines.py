@@ -6,7 +6,7 @@ class Dou(object):
 
     def __init__(self):
         # 连接MySQL数据库
-        self.connect = pymysql.connect(host='localhost', user='zds', password='zds', db='zds', port=3306)
+        self.connect = pymysql.connect(host='localhost', user='zds', password='zds', db='zd', port=3306)
         self.cursor = self.connect.cursor()
         print("______________数据库连接已建立")
 
